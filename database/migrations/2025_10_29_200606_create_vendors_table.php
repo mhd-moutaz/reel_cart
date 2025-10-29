@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->date('birth_date');
-            $table->enum('gender', ['male', 'female']);
-            $table->string('address');
-            $table->text('image')->nullable();
+            $table->integer('national_id')->unique();
+            $table->string('business_type');
+            $table->text('description');
+            $table->enum('verification_status', ['pending', 'verified', 'rejected'])->default('pending');
+            $table->string('has_store');
+            $table->text('pickup_address');
+            $table->time('pickup_hours');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('vendors');
     }
 };
