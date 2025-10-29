@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\GenderClientEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->date('birth_date');
-            $table->enum('gender', ['male', 'female']);
+            $table->enum('gender', [GenderClientEnum::Male, GenderClientEnum::Female]);
             $table->string('address');
             $table->text('image')->nullable();
             $table->timestamps();

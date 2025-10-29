@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\StatusOrderEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
             $table->decimal('total_price', 10, 2);
-            $table->enum('status', ['draft', 'pending', 'processing', 'ready','delivered', 'cancelled'])->default('pending');
+            $table->enum('status', [
+                StatusOrderEnum::Draft,
+                StatusOrderEnum::Pending,
+                StatusOrderEnum::Processing,
+                StatusOrderEnum::Ready,
+                StatusOrderEnum::Delivered,
+                StatusOrderEnum::Cancelled
+            ])->default(StatusOrderEnum::Pending);
             $table->timestamps();
         });
     }
