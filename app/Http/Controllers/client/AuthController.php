@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\vendor;
+namespace App\Http\Controllers\client;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\client\registerRequest;
 use App\Http\Requests\Global\loginRequest;
-use App\Http\Requests\vendor\registerRequest;
-use App\Http\Services\vendor\AuthService;
+use App\Http\Resources\ClientloginregisterResource;
+use App\Http\Services\client\AuthService;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -17,28 +18,20 @@ class AuthController extends Controller
     }
     public function register(registerRequest $request)
     {
-        $vendor = $this->authService->registerVendor($request->validated());
-        return response()->json([
-            'message' => 'vendor successfully registered',
-            'vendor' => $vendor
-        ], 201);
+        $client = $this->authService->registerClient($request->validated());
+        return response()->json(['message' => 'Client registered successfully', new ClientloginregisterResource($client)], 201);
     }
-
     public function login(loginRequest $request)
     {
-        $token = $this->authService->loginVendor($request->validated());
-
+        $token = $this->authService->loginClient($request->validated());
         if (!$token) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-
-        return response()->json(['vendor' => $token], 200);
+        return response()->json(['message' => 'Client logged in successfully', 'token' => $token], 200);
     }
-
     public function logout()
     {
-        $this->authService->logoutVendor();
+        $this->authService->logoutClient();
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }
-
