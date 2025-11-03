@@ -22,9 +22,9 @@ Route::prefix('client')->group(function () {
     Route::post('/logout', [ClientAuthController::class, 'logout'])->middleware('auth:api');
 });
 
-<<<<<<< HEAD
+
 Route::post('/stores', [StoreController::class, 'store'])->middleware('auth:api');
-=======
+
 Route::prefix('delivery')->group(function () {
     Route::post('/register', [DeliveryAuthController::class, 'register']);
     Route::post('/login', [DeliveryAuthController::class, 'login']);
@@ -32,5 +32,5 @@ Route::prefix('delivery')->group(function () {
 });
 
 
->>>>>>> 9b6bf30a7fd44da3f1c859a437a99ce6920e1621
+
 
