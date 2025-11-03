@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\vendor;
+namespace App\Http\Services\vendor\auth;
 
 use App\Models\User;
 use App\Enums\RoleUserEnum;
@@ -32,7 +32,7 @@ class AuthService
                 'business_type' => $data['business_type'],
                 'description' => $data['description'],
                 'has_store' => $data['has_store'],
-                
+
             ]);
             DB::commit();
             return $vendor;

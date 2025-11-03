@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\vendor;
+namespace App\Http\Controllers\vendor\auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Global\loginRequest;
 use App\Http\Requests\vendor\registerRequest;
-use App\Http\Services\vendor\AuthService;
+use App\Http\Services\vendor\auth\AuthService;
 
 class AuthController extends Controller
 {

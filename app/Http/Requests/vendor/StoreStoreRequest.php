@@ -23,8 +23,8 @@ class StoreStoreRequest extends FormRequest
     {
         return [
             'store_name' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
-            'address' => 'required|string|max:500',
+            'image' => 'required|image|max:2048',
+            'address' => 'nullable|string|max:500',
             'verification_docs' => 'nullable|string|max:5120',
             'opening_hours' => 'nullable|string|max:255',
         ];

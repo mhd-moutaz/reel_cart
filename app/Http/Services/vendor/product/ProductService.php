@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\vendor;
+namespace App\Http\Services\vendor\product;
 
 use App\Models\Image;
 use App\Models\Store;

@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Http\Services\vendor;
+namespace App\Http\Services\vendor\store;
 
 use App\Models\Store;
+use App\Models\Vendor;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class StoreService
 {
-    public function show($store)
+    public function show()
     {
-        return $store;
+        $vendor = Auth::user()->vendor;
+        return $vendor->store;
     }
     public function store(array $data)
     {
@@ -23,11 +26,10 @@ class StoreService
         return $store;
     }
 
-    public function update(array $data,$store){
-        if($store->vendor_id != Auth::id()){
-            throw new \Exception('Unauthorized action.',403);
-        }
+    public function update(array $data){
+        $store = Auth::user()->vendor->store;
         if (isset($data['image'])) {
+            Storage::disk('public')->delete($store->image);
             $imagePath = $data['image']->store('stores', 'public');
             $data['image'] = $imagePath;
         }

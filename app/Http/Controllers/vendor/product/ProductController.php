@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\vendor;
+namespace App\Http\Controllers\vendor\product;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\vendor\StoreProductRequest;
-use App\Http\Services\vendor\ProductService;
+use App\Http\Services\vendor\product\ProductService;
 use App\Models\Product;
 use App\Models\Store;
 
