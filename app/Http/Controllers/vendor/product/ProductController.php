@@ -21,7 +21,7 @@ class ProductController extends Controller
     }
     public function index(){
         $product = $this->productService->index();
-        return $this->success(new ProductResource($product), 200);
+        return $this->success( ProductResource::collection($product), 200);
     }
     public function show(Product $product){
         $product = $this->productService->show($product);
