@@ -2,20 +2,13 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
 use App\Http\Controllers\vendor\StoreController;
 use App\Http\Controllers\vendor\ProductController;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
 use App\Http\Controllers\vendor\AuthController as VendorAuthController;
 use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
-=======
-use App\Http\Controllers\client\AuthController as ClientAuthController;
-use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
 use App\Http\Controllers\delivery\OrderController;
-use App\Http\Controllers\vendor\AuthController as VendorAuthController;
-use App\Http\Controllers\vendor\StoreController;
 
->>>>>>> 12c093aa3fac98a9bf8a67e92719b69c1830755d
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -32,7 +25,6 @@ Route::prefix('client')->group(function () {
     Route::post('/logout', [ClientAuthController::class, 'logout'])->middleware('auth:api');
 });
 
-
 Route::post('/stores', [StoreController::class, 'store'])->middleware('auth:api');
 
 Route::prefix('delivery')->group(function () {
@@ -44,10 +36,5 @@ Route::prefix('delivery')->group(function () {
         Route::post('/confirm/{order}', [OrderController::class, 'confirm_Order']);
     });
 });
-<<<<<<< HEAD
 
 Route::post('products', [ProductController::class, 'store'])->middleware('auth:api');
-
-
-=======
->>>>>>> 12c093aa3fac98a9bf8a67e92719b69c1830755d
