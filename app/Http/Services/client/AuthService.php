@@ -24,16 +24,20 @@ class AuthService
                 'role' => RoleUserEnum::Client,
             ]);
 
+            if(isset($data['image']))
+            {
+                $image_path = $data['image']->store('clients','public');
+            }
             $client = $user->client()->create([
                 'birth_date' => $data['birth_date'],
                 'gender' => $data['gender'],
                 'address' => $data['address'],
-                'image' => $data['image'],
+                'image' => $image_path,
             ]);
 
             DB::commit();
             return $client;
-            
+
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;

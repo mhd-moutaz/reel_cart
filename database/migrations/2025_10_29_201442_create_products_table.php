@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->integer('quantity');
-            $table->integer('average_rating');
+            $table->integer('quantity')->default(0);
+            $table->integer('average_rating')->nullable();
             $table->timestamps();
         });
     }

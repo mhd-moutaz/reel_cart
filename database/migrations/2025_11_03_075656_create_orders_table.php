@@ -15,13 +15,14 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->foreignId('delivery_id')->constrained('deliveries');
             $table->decimal('total_price', 10, 2);
             $table->enum('status', [
-                StatusOrderEnum::Draft,
                 StatusOrderEnum::Pending,
                 StatusOrderEnum::Processing,
                 StatusOrderEnum::Ready,
                 StatusOrderEnum::Delivered,
+                StatusOrderEnum::Completed,
                 StatusOrderEnum::Cancelled
             ])->default(StatusOrderEnum::Pending);
             $table->timestamps();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\HasStoreVendorEnum;
 use App\Enums\VerificationStatusVendorEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,15 +18,19 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('national_id')->unique();
             $table->string('business_type');
-            $table->text('description');
-            $table->enum('verification_status', [
-                VerificationStatusVendorEnum::Pending,
-                VerificationStatusVendorEnum::Verified,
-                VerificationStatusVendorEnum::Rejected ]
+            $table->text('description')->nullable();
+            $table->enum(
+                'verification_status',
+                [
+                    VerificationStatusVendorEnum::Pending,
+                    VerificationStatusVendorEnum::Verified,
+                    VerificationStatusVendorEnum::Rejected
+                ]
             )->default(VerificationStatusVendorEnum::Pending);
-            $table->string('has_store');
-            $table->text('pickup_address');
-            $table->time('pickup_hours');
+            $table->enum(
+                'has_store',
+                [HasStoreVendorEnum::online, HasStoreVendorEnum::onSite]
+            );
             $table->timestamps();
         });
     }
@@ -38,4 +43,3 @@ return new class extends Migration
         Schema::dropIfExists('vendors');
     }
 };
-

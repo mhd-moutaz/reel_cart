@@ -29,7 +29,7 @@ class registerRequest extends FormRequest
             'birth_date' => 'required',
             'gender' => 'required|string|in:Male,Female',
             'address' => 'required|string',
-            'image' => 'required|string',
+            'image' => 'required',
         ];
     }
     public function messages(): array
@@ -61,7 +61,6 @@ class registerRequest extends FormRequest
             'address.string' => 'Address must be a string',
 
             'image.required' => 'Image is required',
-            'image.string' => 'Image must be a string',
         ];
     }
 }

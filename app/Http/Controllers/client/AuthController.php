@@ -5,7 +5,7 @@ namespace App\Http\Controllers\client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\client\registerRequest;
 use App\Http\Requests\Global\loginRequest;
-use App\Http\Resources\ClientloginregisterResource;
+use App\Http\Resources\client\ClientloginregisterResource;
 use App\Http\Services\client\AuthService;
 use Illuminate\Http\Request;
 

@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('vendor_id')->constrained('vendors')->onDelete('cascade');
             $table->string('store_name');
             $table->text('image');
-            $table->text('address');
-            $table->text('verification_docs');
-            $table->time('opening_hours');
+            $table->text('address')->nullable();
+            $table->text('verification_docs')->nullable();
+            $table->time('opening_hours')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });
