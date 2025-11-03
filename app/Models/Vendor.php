@@ -13,8 +13,6 @@ class Vendor extends Model
         'description',
         'verification_status',
         'has_store',
-        'pickup_address',
-        'pickup_hours'
     ];
 
     public function user()

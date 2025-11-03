@@ -16,6 +16,10 @@ class Order extends Model
     {
         return $this->belongsTo(Client::class);
     }
+    public function delivery()
+    {
+        return $this->belongsTo(Delivery::class);
+    }
     public function carts()
     {
         return $this->hasMany(Cart::class);
