@@ -6,6 +6,7 @@ use App\Http\Controllers\vendor\store\StoreController as vendorStoreController;
 use App\Http\Controllers\vendor\auth\AuthController as VendorAuthController;
 use App\Http\Controllers\vendor\product\ProductController as vendorProductController;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
+use App\Http\Controllers\client\OrderController as ClientOrderController;
 use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
 use App\Http\Controllers\delivery\OrderController;
 
@@ -41,6 +42,10 @@ Route::prefix('client')->group(function () {
     Route::post('/register', [ClientAuthController::class, 'register']);
     Route::post('/login', [ClientAuthController::class, 'login']);
     Route::post('/logout', [ClientAuthController::class, 'logout'])->middleware('auth:api');
+    Route::prefix('orders')->group(function () {
+        Route::post('/create', [ClientOrderController::class, 'create'])->middleware('auth:api');
+        Route::get('/get', [ClientOrderController::class, 'index'])->middleware('auth:api');
+    });
 });
 
 
