@@ -28,8 +28,5 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
-    public function delivery()
-    {
-        return $this->belongsTo(Delivery::class);
-    }
+   
 }
