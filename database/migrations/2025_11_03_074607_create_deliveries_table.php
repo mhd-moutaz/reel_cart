@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('national_id');
+            $table->text('image');
             $table->text('address');
             $table->date('birth_date');
             $table->timestamps();
