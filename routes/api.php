@@ -12,16 +12,27 @@ use App\Http\Controllers\delivery\OrderController;
 
 
 Route::prefix('vendor')->group(function () {
+    // Vendor Auth Routes ----------------------------------------------------------
     Route::post('/register', [VendorAuthController::class, 'register']);
     Route::post('/login', [VendorAuthController::class, 'login']);
 
     Route::middleware('auth:api')->group(function () {
+        // Vendor Auth Routes--------------------------------------------------------
         Route::post('/logout', [VendorAuthController::class, 'logout']);
-
+        // Store Routes--------------------------------------------------------------
         Route::prefix('stores')->group(function () {
-            Route::post('/', [vendorStoreController::class, 'store']);
             Route::get('/', [vendorStoreController::class, 'show']);
-            Route::put('/', [vendorStoreController::class, 'update']);
+            Route::post('/create', [vendorStoreController::class, 'store']);
+            Route::put('/update', [vendorStoreController::class, 'update']);
+        });
+        // Product Routes------------------------------------------------------------
+        Route::prefix('products')->group(function () {
+            Route::get('/', [vendorProductController::class, 'index']);
+            Route::post('/add', [vendorProductController::class, 'store']);
+            Route::put('/update', [vendorProductController::class, 'update']);
+            Route::get('/{product}', [vendorProductController::class, 'show']);
+            Route::delete('/delete/{product}', [vendorProductController::class, 'destroy']);
+            Route::delete('/removeImage/{image}', [vendorProductController::class, 'removeImage']);
         });
     });
 });
@@ -44,4 +55,4 @@ Route::prefix('delivery')->group(function () {
     });
 });
 
-Route::post('products', [vendorProductController::class, 'store'])->middleware('auth:api');
+

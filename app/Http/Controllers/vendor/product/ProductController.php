@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\vendor\product;
 
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateProductRequest;
 use App\Http\Requests\vendor\StoreProductRequest;
+use App\Http\Resources\vendor\ProductResource;
 use App\Http\Services\vendor\product\ProductService;
+use App\Models\Image;
 use App\Models\Product;
-use App\Models\Store;
+
 
 class ProductController extends Controller
 {
@@ -16,22 +19,31 @@ class ProductController extends Controller
     {
         $this->productService = $productService;
     }
-    public function index(Store $store){
-        $product = $this->productService->index($store);
-        return response()->json($product, 200);
+    public function index(){
+        $product = $this->productService->index();
+        return $this->success(new ProductResource($product), 200);
     }
     public function show(Product $product){
         $product = $this->productService->show($product);
-        return response()->json($product, 200);
+        return $this->success(new ProductResource($product), 200);
     }
     public function store(StoreProductRequest $request){
         $product = $this->productService->store($request->validated());
-        return response()->json($product, 201);
+        return $this->success(new ProductResource($product), 201);
     }
-    public function update(){
+    public function update(UpdateProductRequest $request, Product $product){
+        $product = $this->productService->update($request->validated(), $product);
+        return $this->success(new ProductResource($product), 200);
 
     }
-    public function destroy(){
+    public function removeImage(Image $image)
+    {
+        $this->productService->removeImage($image);
+        return $this->success([], 'Image removed successfully',200);
+    }
+    public function destroy(Product $product){
+        $this->productService->destroy($product);
+        return $this->success([], 'Product deleted successfully',200);
 
     }
 }

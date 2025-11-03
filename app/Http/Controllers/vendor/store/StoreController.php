@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\vendor\store;
 
-use App\Models\Store;
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
 use App\Http\Services\vendor\store\StoreService;
 use App\Http\Requests\vendor\StoreStoreRequest;
