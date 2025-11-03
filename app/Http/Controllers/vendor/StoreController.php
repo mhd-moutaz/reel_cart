@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Services\vendor\StoreService;
 use App\Http\Requests\vendor\StoreStoreRequest;
+use App\Http\Requests\vendor\UpdateStoreRequest;
 
 class StoreController extends Controller
 {
@@ -26,8 +27,8 @@ class StoreController extends Controller
         $store=$this->storeService->store($request->validated());
         return response()->json($store, 201);
     }
-    public function update(Request $request, Store $store)
+    public function update(UpdateStoreRequest $request, Store $store)
     {
-        
+        $store = $this->storeService->update($request->validated(),$store);
     }
 }

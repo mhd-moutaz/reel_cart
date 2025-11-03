@@ -23,8 +23,16 @@ class StoreService
         return $store;
     }
 
-    public function update(){
-        
+    public function update(array $data,$store){
+        if($store->vendor_id != Auth::id()){
+            throw new \Exception('Unauthorized action.',403);
+        }
+        if (isset($data['image'])) {
+            $imagePath = $data['image']->store('stores', 'public');
+            $data['image'] = $imagePath;
+        }
+        $store->update($data);
+        return $store;
     }
 
 }

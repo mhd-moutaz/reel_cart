@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\client;
+namespace App\Http\Services\delivery;
 
 use App\Enums\RoleUserEnum;
 use App\Models\Client;
@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\Throw_;
 
 class AuthService
 {
-    public function registerClient(array $data)
+    public function registerDelivery(array $data)
     {
         DB::beginTransaction();
         try {
@@ -21,29 +21,27 @@ class AuthService
                 'email' => $data['email'],
                 'password' => $data['password'],
                 'phone_number' => $data['phone_number'],
-                'role' => RoleUserEnum::Client,
+                'role' => RoleUserEnum::Delivery,
             ]);
 
-            if(isset($data['image']))
-            {
-                $image_path = $data['image']->store('clients','public');
+            if (isset($data['image'])) {
+                $image_path = $data['image']->store('delivery', 'public');
             }
-            $client = $user->client()->create([
-                'birth_date' => $data['birth_date'],
-                'gender' => $data['gender'],
+            $delivery = $user->delivery()->create([
+                'national_id' => $data['national_id'],
                 'address' => $data['address'],
+                'birth_date' => $data['birth_date'],
                 'image' => $image_path,
             ]);
 
             DB::commit();
-            return $client;
-
+            return $delivery;
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
-    public function loginClient(array $data)
+    public function loginDelivery(array $data)
     {
         $token = Auth::attempt($data);
         if (!$token) {
@@ -51,7 +49,7 @@ class AuthService
         }
         return $token;
     }
-    public function logoutClient()
+    public function logoutDelivery()
     {
         Auth::logout();
     }

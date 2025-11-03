@@ -29,9 +29,7 @@ class registerRequest extends FormRequest
             'national_id' => 'required|string|min:11|max:11|unique:vendors,national_id',
             'business_type' => 'required|string',
             'description' => 'required|string',
-            'has_store' => 'required|in:yes,no',
-            'pickup_address' => 'required|string',
-            'pickup_hours' => 'required|date_format:H:i',
+            'has_store' => 'required',
         ];
     }
     public function messages(): array
@@ -51,10 +49,6 @@ class registerRequest extends FormRequest
             'business_type.required' => 'Business type is required.',
             'description.required' => 'Description is required.',
             'has_store.required' => 'Please specify if you have a store.',
-            'has_store.in' => 'Has store must be either "yes" or "no".',
-            'pickup_address.required' => 'Pickup address is required.',
-            'pickup_hours.required' => 'Pickup hours are required.',
-            'pickup_hours.date_format' => 'Pickup hours must be in the format HH:MM.',
         ];
     }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
+use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
 use App\Http\Controllers\vendor\AuthController as VendorAuthController;
 use App\Http\Controllers\vendor\StoreController;
 Route::get('/user', function (Request $request) {
@@ -21,5 +22,15 @@ Route::prefix('client')->group(function () {
     Route::post('/logout', [ClientAuthController::class, 'logout'])->middleware('auth:api');
 });
 
+<<<<<<< HEAD
 Route::post('/stores', [StoreController::class, 'store'])->middleware('auth:api');
+=======
+Route::prefix('delivery')->group(function () {
+    Route::post('/register', [DeliveryAuthController::class, 'register']);
+    Route::post('/login', [DeliveryAuthController::class, 'login']);
+    Route::post('/logout', [DeliveryAuthController::class, 'logout'])->middleware('auth:api');
+});
+
+
+>>>>>>> 9b6bf30a7fd44da3f1c859a437a99ce6920e1621
 
