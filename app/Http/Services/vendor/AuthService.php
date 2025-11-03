@@ -32,8 +32,7 @@ class AuthService
                 'business_type' => $data['business_type'],
                 'description' => $data['description'],
                 'has_store' => $data['has_store'],
-                'pickup_address' => $data['pickup_address'],
-                'pickup_hours' => $data['pickup_hours'],
+                
             ]);
             DB::commit();
             return $vendor;

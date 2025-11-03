@@ -25,7 +25,8 @@ class ProductController extends Controller
         return response()->json($product, 200);
     }
     public function store(StoreProductRequest $request){
-        $product = $this->productService->store($request);
+        $product = $this->productService->store($request->validated());
+        return response()->json($product, 201);
     }
     public function update(){
 

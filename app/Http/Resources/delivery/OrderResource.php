@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\delivery;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -14,12 +14,11 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return
-            [
-                $this->id,
-                $this->delivery->name,
-                $this->total_price,
-                $this->status
-            ];
+        return [
+            'id' => $this->id,
+            'client_name' => $this->client->user->name,
+            'total_price' => $this->total_price,
+            'status' => $this->status,
+        ];
     }
 }

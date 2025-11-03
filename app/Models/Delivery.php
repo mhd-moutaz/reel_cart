@@ -11,6 +11,7 @@ class Delivery extends Model
         'user_id',
         'national_id',
         'address',
+        'image',
         'birth_date',
     ];
     public function user()
