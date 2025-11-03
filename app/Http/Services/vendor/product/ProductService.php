@@ -3,12 +3,11 @@
 namespace App\Http\Services\vendor\product;
 
 use App\Models\Image;
-use App\Models\Store;
-use App\Models\Vendor;
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\GeneralException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
@@ -71,7 +70,7 @@ class ProductService
                     ]);
                 }
             }
-            $product = Product::create($productData);
+            $product->update($productData);
             DB::commit();
             return $product;
         } catch (\Exception $e) {
@@ -82,6 +81,7 @@ class ProductService
     public function removeImage($image)
     {
         try {
+            Storage::disk('public')->delete($image->image_url);
             $image->delete();
             return true;
         } catch (\Exception $e) {

@@ -29,8 +29,8 @@ Route::prefix('vendor')->group(function () {
         Route::prefix('products')->group(function () {
             Route::get('/', [vendorProductController::class, 'index']);
             Route::post('/add', [vendorProductController::class, 'store']);
-            Route::put('/update', [vendorProductController::class, 'update']);
             Route::get('/{product}', [vendorProductController::class, 'show']);
+            Route::put('/update/{product}', [vendorProductController::class, 'update']);
             Route::delete('/delete/{product}', [vendorProductController::class, 'destroy']);
             Route::delete('/removeImage/{image}', [vendorProductController::class, 'removeImage']);
         });
