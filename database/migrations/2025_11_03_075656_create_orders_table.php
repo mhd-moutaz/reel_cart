@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
-            $table->foreignId('delivery_id')->constrained('deliveries')->nullable()->default(null);
+            $table->foreignId('delivery_id')->nullable()->default(null)->constrained('deliveries');
             $table->decimal('total_price', 10, 2)->default(0);
             $table->enum('status', [
                 StatusOrderEnum::Pending,
