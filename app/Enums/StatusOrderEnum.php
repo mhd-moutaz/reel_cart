@@ -1,7 +1,7 @@
 <?php
 namespace App\Enums;
 enum StatusOrderEnum{
-    const Draft = 'draft';
+    const Completed = 'completed';
     const Pending = 'pending';
     const Processing = 'processing';
     const Ready = 'ready';

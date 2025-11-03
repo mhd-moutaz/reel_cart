@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
 use App\Http\Controllers\vendor\AuthController as VendorAuthController;
-
+use App\Http\Controllers\vendor\StoreController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -21,5 +21,5 @@ Route::prefix('client')->group(function () {
     Route::post('/logout', [ClientAuthController::class, 'logout'])->middleware('auth:api');
 });
 
-
+Route::post('/stores', [StoreController::class, 'store'])->middleware('auth:api');
 
