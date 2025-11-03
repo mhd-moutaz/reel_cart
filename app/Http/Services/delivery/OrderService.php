@@ -33,8 +33,12 @@ class OrderService
     }
     public function chooseOrder($order)
     {
-        $order->delivery_id = Auth::id();
-        $order->status = StatusOrderEnum::Ready;
-        return $order;
+        if ($order->status === StatusOrderEnum::Processing) {
+            $order->delivery_id = Auth::id();
+            $order->status = StatusOrderEnum::Ready;
+            return $order;
+        } else {
+            throw new \Exception('The order status is not processing');
+        }
     }
 }

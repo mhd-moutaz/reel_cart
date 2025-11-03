@@ -4,8 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
 use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
+use App\Http\Controllers\delivery\OrderController;
 use App\Http\Controllers\vendor\AuthController as VendorAuthController;
 use App\Http\Controllers\vendor\StoreController;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -29,8 +31,8 @@ Route::prefix('delivery')->group(function () {
     Route::post('/register', [DeliveryAuthController::class, 'register']);
     Route::post('/login', [DeliveryAuthController::class, 'login']);
     Route::post('/logout', [DeliveryAuthController::class, 'logout'])->middleware('auth:api');
+    Route::prefix('orders')->group(function () {
+        Route::get('/get', [OrderController::class, 'getAllOrdersProcessing']);
+        Route::post('/confirm/{order}', [OrderController::class, 'confirm_Order']);
+    });
 });
-
-
-
-

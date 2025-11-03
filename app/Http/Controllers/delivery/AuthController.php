@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\client\registerRequest;
 use App\Http\Requests\delivery\RegisterDeliveryRequest;
 use App\Http\Requests\Global\loginRequest;
-use App\Http\Resources\client\DeliveryloginregisterResource;
+use App\Http\Resources\delivery\DeliveryloginregisterResource;
 use App\Http\Services\delivery\AuthService;
 use App\Models\Delivery;
 use Illuminate\Http\Request;
