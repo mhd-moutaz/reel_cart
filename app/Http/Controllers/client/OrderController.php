@@ -5,6 +5,7 @@ namespace App\Http\Controllers\client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\client\createOrderRequest;
 use App\Http\Resources\client\CartResource;
+use App\Http\Resources\client\OrderResource;
 use App\Http\Services\client\OrderService;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,7 @@ class OrderController extends Controller
     }
     public function index()
     {
-        $cart = $this->orderservice->showOrderCart();
-        return $this->success(['Cart showed successfully', CartResource::collection($cart)], 201);
+        $order = $this->orderservice->showOrderCart();
+        return $this->success(['Cart showed successfully', new OrderResource($order)], 201);
     }
 }

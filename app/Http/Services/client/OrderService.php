@@ -19,7 +19,6 @@ class OrderService
 
         try {
             $client = Client::where('user_id', Auth::id())->first();
-
             if (!$client) {
                 throw new \Exception('Client not found for this user.');
             }
@@ -31,8 +30,6 @@ class OrderService
             if (!$order) {
                 $order = Order::create([
                     'client_id' => $client->id,
-                    'delivery_id' => null,
-                    'total_price' => 0,
                 ]);
             }
 
@@ -41,13 +38,16 @@ class OrderService
             if (!$product) {
                 throw new \Exception('Product not found.');
             }
+            if ($data['quantity'] > $product->quantity) {
+                throw new \Exception('Product stock not available.');
+            }
+
             $check_cart = Cart::where('order_id', $order->id)
                 ->where('product_id', $product->id)
                 ->first();
             if ($check_cart) {
                 throw new \Exception('Product already in cart, please update quantity instead.');
             }
-
             $cart = Cart::create([
                 'order_id'   => $order->id,
                 'product_id' => $data['product_id'],
@@ -57,7 +57,6 @@ class OrderService
             ]);
             $order->total_price += $cart->sub_total;
             $order->save();
-
             DB::commit();
             return $cart;
         } catch (\Exception $e) {
@@ -77,7 +76,6 @@ class OrderService
         if (!$order) {
             throw new \Exception('you have no Order, please go and add to your cart');
         }
-        $cart = Cart::where('order_id', $order->id)->get();
-        return $cart;
+        return $order;
     }
 }
