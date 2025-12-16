@@ -31,9 +31,14 @@ class OrderController extends Controller
         $order = $this->orderservice->show($order);
         return response()->json([new OrderResource($order)], 200);
     }
-    public function updateMyOrder(Order $order, Request $request)
+    public function updateMyOrder(Order $order)
     {
-        $order = $this->orderservice->updateStatusOrder($order, $request->only('status'));
+        $order = $this->orderservice->updateStatusOrder($order);
         return response()->json([new OrderResource($order)], 200);
+    }
+    public function cancelOrder(Order $order)
+    {
+        $order = $this->orderservice->cancelOrder($order);
+        return response()->json(['message' => 'The Order has been cancelled!', 'order' => new OrderResource($order)], 200);
     }
 }

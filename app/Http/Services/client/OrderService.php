@@ -3,6 +3,7 @@
 namespace App\Http\Services\client;
 
 use App\Enums\StatusOrderEnum;
+use App\Exceptions\GeneralException;
 use App\Models\Cart;
 use App\Models\Client;
 use App\Models\Order;
@@ -13,6 +14,31 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
+    //-----------------------------------------------------------------------------------------------------------------Cart
+    public function removeCart($cart)
+    {
+        $order = $cart->order;
+        $order->total_price -= $cart->sub_total;
+        $order->save();
+        $cart->delete();
+        return true;
+    }
+    public function updateCartQuantity(Cart $cart, int $quantity)
+    {
+        $product = Product::find($cart->product_id);
+        if ($quantity > $product->quantity) {
+            throw new GeneralException('Product stock not available for the requested quantity.');
+        }
+        $order = $cart->order;
+        $order->total_price -= $cart->sub_total;
+        $cart->quantity = $quantity;
+        $cart->sub_total = $quantity * $cart->unit_price;
+        $cart->save();
+        $order->total_price += $cart->sub_total;
+        $order->save();
+        return $cart;
+    }
+    //-----------------------------------------------------------------------------------------------------------------Order
     public function createOrder(array $data)
     {
         DB::beginTransaction();
@@ -64,18 +90,49 @@ class OrderService
             throw $e;
         }
     }
-    public function showOrderCart()
+    public function showPendingOrderCart()
     {
         $client = Client::where('user_id', Auth::id())->first();
         if (!$client) {
-            throw new \Exception('Client not found for this user.');
+            throw new GeneralException('Client not found for this user.', 404);
         }
         $order = Order::where('client_id', $client->id)
             ->where('status', StatusOrderEnum::Pending)
             ->first();
         if (!$order) {
-            throw new \Exception('you have no Order, please go and add to your cart');
+            throw new GeneralException('you have no Order, please go and add to your cart', 404);
         }
         return $order;
+    }
+    public function confirmOrder(Order $order)
+    {
+        $cart_items = Cart::where('order_id', $order->id)->get();
+        if ($cart_items->isEmpty()) {
+            throw new GeneralException('Cannot confirm an empty order.');
+        } else {
+            foreach ($cart_items as $item) {
+                $product = Product::find($item->product_id);
+                if ($item->quantity > $product->quantity) {
+                    throw new GeneralException("Insufficient stock for product ID: {$product->id}, available quantity: {$product->quantity}.");
+                }
+            }
+        }
+        $order->status = StatusOrderEnum::Processing;
+        $order->save();
+        return $order;
+    }
+    public function getAllOrders()
+    {
+        $client = Client::where('user_id', Auth::id())->first();
+        $orders = Order::where('client_id', $client->id)->get();
+        return $orders;
+    }
+    public function cancelOrder($order)
+    {
+        if($order->status === StatusOrderEnum::Pending || $order->status === StatusOrderEnum::Processing){
+            $order->status = StatusOrderEnum::Cancelled;
+            $order->save();
+            return $order;
+        }
     }
 }
