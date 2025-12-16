@@ -24,6 +24,9 @@ class StoreProductRequest extends FormRequest
         return [
 
             'image_url' => 'required',
+            // 'image_url' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:10000',
+            // 'reel_url' => 'required|file|mimes:mp4,mov,avi,wmv|max:50000',
+            'reel_url' => 'required',
             'title' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|decimal:0,1000000',

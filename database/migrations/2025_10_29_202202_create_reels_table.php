@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('reels', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->text('video_url');
+            $table->text('reel_url');
             $table->timestamps();
         });
     }

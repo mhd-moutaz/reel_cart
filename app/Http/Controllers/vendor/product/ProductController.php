@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\vendor\product;
 
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateProductRequest;
-use App\Http\Requests\vendor\StoreProductRequest;
-use App\Http\Resources\vendor\ProductResource;
-use App\Http\Services\vendor\product\ProductService;
+use App\Models\Reel;
 use App\Models\Image;
 use App\Models\Product;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\vendor\UpdateProductRequest;
+use App\Http\Resources\vendor\ProductResource;
+use App\Http\Requests\vendor\StoreProductRequest;
+use App\Http\Services\vendor\product\ProductService;
 
 
 class ProductController extends Controller
@@ -40,6 +41,11 @@ class ProductController extends Controller
     {
         $this->productService->removeImage($image);
         return $this->success([], 'Image removed successfully',200);
+    }
+    public function removeReel(Reel $reel)
+    {
+        $this->productService->removeReel($reel);
+        return $this->success([], 'Reel removed successfully',200);
     }
     public function destroy(Product $product){
         $this->productService->destroy($product);

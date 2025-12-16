@@ -35,7 +35,8 @@ class ProductService
         DB::beginTransaction();
         try {
             $productData = $data;
-            unset($productData['image_url']); // إزالة الصور من بيانات المنتج
+            unset($productData['image_url']);
+            unset($productData['reel_url']);
             $productData['store_id'] = Auth::user()->vendor->store->id;
             $product = Product::create($productData);
             if (isset($data['image_url']) && is_array($data['image_url'])) {
@@ -44,6 +45,14 @@ class ProductService
                     Image::create([
                         'product_id' => $product->id,
                         'image_url' => $imagePath,
+                    ]);
+                }
+            }
+            if (isset($data['reel_url']) && is_array($data['reel_url'])) {
+                foreach ($data['reel_url'] as $reel) {
+                    $reelPath = $reel->store('reels', 'public');
+                    $product->reels()->create([
+                        'reel_url' => $reelPath,
                     ]);
                 }
             }
@@ -70,6 +79,15 @@ class ProductService
                     ]);
                 }
             }
+            if (isset($data['reel_url']) && is_array($data['reel_url'])) {
+                unset($productData['reel_url']);
+                foreach ($data['reel_url'] as $reel) {
+                    $reelPath = $reel->store('reels', 'public');
+                    $product->reels()->create([
+                        'reel_url' => $reelPath,
+                    ]);
+                }
+            }
             $product->update($productData);
             DB::commit();
             return $product;
@@ -87,6 +105,17 @@ class ProductService
         } catch (\Exception $e) {
 
             throw new GeneralException('remove image failed');
+        }
+    }
+    public function removeReel($reel)
+    {
+        try {
+            Storage::disk('public')->delete($reel->reel_url);
+            $reel->delete();
+            return true;
+        } catch (\Exception $e) {
+
+            throw new GeneralException('remove reel failed');
         }
     }
     public function destroy($product)

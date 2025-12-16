@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\vendor\store;
 
+use App\Exceptions\GeneralException;
 use App\Models\Store;
 use App\Models\Vendor;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +18,9 @@ class StoreService
     }
     public function store(array $data)
     {
+        if (Auth::user()->vendor->store) {
+            throw new GeneralException('Store already exists for this vendor.');
+        }
         $data['vendor_id'] = Auth::id();
         if (isset($data['image'])) {
             $imagePath = $data['image']->store('stores', 'public');
@@ -28,6 +32,9 @@ class StoreService
 
     public function update(array $data){
         $store = Auth::user()->vendor->store;
+        if (!$store) {
+            throw new GeneralException('Store does not exist for this vendor.');
+        }
         if (isset($data['image'])) {
             Storage::disk('public')->delete($store->image);
             $imagePath = $data['image']->store('stores', 'public');

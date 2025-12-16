@@ -3,10 +3,9 @@
 namespace App\Http\Resources\vendor;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\vendor\ReelResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class ReelResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,13 +16,7 @@ class ProductResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'price' => $this->price,
-            'quantity' => $this->quantity,
-            'average_rating' => $this->average_rating,
-            'images' => ImageResource::collection($this->images),
-            'reels' => ReelResource::collection($this->reels),
+            'reel_url' => $this->reel_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
