@@ -16,7 +16,8 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'client_name' => $this->client->user->name,
+            'client' => $this->client?->user?->name ?? 'No client linked',
+            'delivery' => $this->delivery?->user?->name ?? 'No delivery linked',
             'total_price' => $this->total_price,
             'status' => $this->status,
         ];

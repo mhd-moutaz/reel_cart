@@ -8,9 +8,8 @@ use App\Http\Controllers\vendor\product\ProductController as vendorProductContro
 use App\Http\Controllers\client\AuthController as ClientAuthController;
 use App\Http\Controllers\client\OrderController as ClientOrderController;
 use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
-use App\Http\Controllers\delivery\OrderController;
-
-
+use App\Http\Controllers\delivery\OrderController as DeliveryOrderController;
+use App\Models\Delivery;
 
 Route::prefix('vendor')->group(function () {
     // Vendor Auth Routes ----------------------------------------------------------
@@ -41,10 +40,17 @@ Route::prefix('vendor')->group(function () {
 Route::prefix('client')->group(function () {
     Route::post('/register', [ClientAuthController::class, 'register']);
     Route::post('/login', [ClientAuthController::class, 'login']);
-    Route::post('/logout', [ClientAuthController::class, 'logout'])->middleware('auth:api');
-    Route::prefix('orders')->group(function () {
-        Route::post('/create', [ClientOrderController::class, 'create'])->middleware('auth:api');
-        Route::get('/get', [ClientOrderController::class, 'index'])->middleware('auth:api');
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/logout', [ClientAuthController::class, 'logout']);
+        Route::prefix('orders')->group(function () {
+            Route::post('/create', [ClientOrderController::class, 'create']);
+            Route::get('/get', [ClientOrderController::class, 'index']);
+            Route::delete('/deleteCart/{cart}', [ClientOrderController::class, 'deleteCart']);
+            Route::post('/confirm/{order}', [ClientOrderController::class, 'confirm_order']);
+            Route::get('/allOrders', [ClientOrderController::class, 'showOrders']);
+            Route::put('/updateCartQuantity/{cart}', [ClientOrderController::class, 'update_cart_quantity']);
+            Route::put('/cancelOrder/{order}', [ClientOrderController::class, 'CancelOrder']);
+        });
     });
 });
 
@@ -53,11 +59,15 @@ Route::prefix('client')->group(function () {
 Route::prefix('delivery')->group(function () {
     Route::post('/register', [DeliveryAuthController::class, 'register']);
     Route::post('/login', [DeliveryAuthController::class, 'login']);
-    Route::post('/logout', [DeliveryAuthController::class, 'logout'])->middleware('auth:api');
-    Route::prefix('orders')->group(function () {
-        Route::get('/get', [OrderController::class, 'getAllOrdersProcessing']);
-        Route::post('/confirm/{order}', [OrderController::class, 'confirm_Order']);
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/logout', [DeliveryAuthController::class, 'logout']);
+        Route::prefix('orders')->group(function () {
+            Route::get('/get', [DeliveryOrderController::class, 'getAllOrdersProcessing']);
+            Route::post('/confirm/{order}', [DeliveryOrderController::class, 'confirm_Order']);
+            Route::put('/updateMyOrder/{order}', [DeliveryOrderController::class, 'updateMyOrder']);
+            Route::put('/cancelOrder/{order}', [DeliveryOrderController::class, 'cancelOrder']);
+            Route::post('/show', [DeliveryOrderController::class, 'showMyOrder']);
+
+        });
     });
 });
-
-
