@@ -7,16 +7,13 @@ use App\Http\Controllers\vendor\reels\ReelController;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
 use App\Http\Controllers\client\OrderController as ClientOrderController;
 use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
-<<<<<<< HEAD
 use App\Http\Controllers\vendor\auth\AuthController as VendorAuthController;
 use App\Http\Controllers\vendor\store\StoreController as vendorStoreController;
 use App\Http\Controllers\vendor\product\ProductController as vendorProductController;
 
 
-=======
 use App\Http\Controllers\delivery\OrderController as DeliveryOrderController;
 use App\Models\Delivery;
->>>>>>> 380ca4748fc1d3de20166ff6020c5a022dcbbf17
 
 Route::prefix('vendor')->group(function () {
     // Vendor Auth Routes ----------------------------------------------------------
@@ -60,17 +57,13 @@ Route::prefix('client')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('/create', [ClientOrderController::class, 'create']);
             Route::get('/get', [ClientOrderController::class, 'index']);
-<<<<<<< HEAD
         });
 
-=======
-            Route::delete('/deleteCart/{cart}', [ClientOrderController::class, 'deleteCart']);
-            Route::post('/confirm/{order}', [ClientOrderController::class, 'confirm_order']);
-            Route::get('/allOrders', [ClientOrderController::class, 'showOrders']);
-            Route::put('/updateCartQuantity/{cart}', [ClientOrderController::class, 'update_cart_quantity']);
-            Route::put('/cancelOrder/{order}', [ClientOrderController::class, 'CancelOrder']);
-        });
->>>>>>> 380ca4748fc1d3de20166ff6020c5a022dcbbf17
+        Route::delete('/deleteCart/{cart}', [ClientOrderController::class, 'deleteCart']);
+        Route::post('/confirm/{order}', [ClientOrderController::class, 'confirm_order']);
+        Route::get('/allOrders', [ClientOrderController::class, 'showOrders']);
+        Route::put('/updateCartQuantity/{cart}', [ClientOrderController::class, 'update_cart_quantity']);
+        Route::put('/cancelOrder/{order}', [ClientOrderController::class, 'CancelOrder']);
     });
 });
 
@@ -87,7 +80,6 @@ Route::prefix('delivery')->group(function () {
             Route::put('/updateMyOrder/{order}', [DeliveryOrderController::class, 'updateMyOrder']);
             Route::put('/cancelOrder/{order}', [DeliveryOrderController::class, 'cancelOrder']);
             Route::post('/show', [DeliveryOrderController::class, 'showMyOrder']);
-
         });
     });
 });

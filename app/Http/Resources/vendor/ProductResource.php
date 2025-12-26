@@ -4,7 +4,6 @@ namespace App\Http\Resources\vendor;
 
 use App\Http\Resources\ReelResource;
 use Illuminate\Http\Request;
-use App\Http\Resources\vendor\ReelResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
