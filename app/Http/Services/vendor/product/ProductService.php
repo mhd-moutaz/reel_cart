@@ -39,15 +39,8 @@ class ProductService
         DB::beginTransaction();
         try {
             $productData = $data;
-            unset($productData['images']);
-            unset($productData['reel']);
-            if (Auth::check() && Auth::user()->vendor && Auth::user()->vendor->store) {
-                $productData['store_id'] = Auth::user()->vendor->store->id;
-                $productData['vendor_id'] = Auth::user()->vendor->id;
-            } else {
-                $productData['store_id'] = null;
-                $productData['vendor_id'] = Auth::user()->vendor->id;
-            }
+            unset($productData['image_url']); // إزالة الصور من بيانات المنتج
+            $productData['store_id'] = Auth::user()->vendor->store->id;
             $product = Product::create($productData);
             $reelPath = $data['reel']->storeAs('reels', $product->id . '.' . $product->vendor_id . '.mp4', 'public');
             Reel::create([
@@ -65,7 +58,6 @@ class ProductService
                     ]);
                 }
             }
-
             DB::commit();
             $product->load('reels', 'images', 'store');
             return $product;
@@ -150,21 +142,7 @@ class ProductService
                     ]);
                 }
             }
-
-            // حذف صور محددة إذا تم إرسال IDs
-            if (isset($data['delete_image_ids']) && is_array($data['delete_image_ids'])) {
-                $imagesToDelete = Image::whereIn('id', $data['delete_image_ids'])
-                    ->where('product_id', $product->id)
-                    ->get();
-
-                foreach ($imagesToDelete as $image) {
-                    if (Storage::disk('public')->exists($image->image_url)) {
-                        Storage::disk('public')->delete($image->image_url);
-                    }
-                    $image->delete();
-                }
-            }
-
+            $product->update($productData);
             DB::commit();
             $product->save();
             $product->load('reels', 'images', 'store', 'vendor');
@@ -184,6 +162,17 @@ class ProductService
         } catch (\Exception $e) {
 
             throw new GeneralException('remove image failed');
+        }
+    }
+    public function removeReel($reel)
+    {
+        try {
+            Storage::disk('public')->delete($reel->reel_url);
+            $reel->delete();
+            return true;
+        } catch (\Exception $e) {
+
+            throw new GeneralException('remove reel failed');
         }
     }
     public function destroy($product)

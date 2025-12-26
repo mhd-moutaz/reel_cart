@@ -8,7 +8,7 @@ class Reel extends Model
 {
     protected $fillable = [
         'product_id',
-        'video_url',
+        'url',
     ];
 
     public function product()

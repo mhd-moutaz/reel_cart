@@ -4,7 +4,7 @@ namespace App\Http\Requests\vendor;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProductRequest extends FormRequest
+class StoreReelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,8 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-
-            'image_url' => 'required',
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|decimal:0,1000000',
-            'quantity' => 'required|integer',
-            'average_rating' => 'required|integer|min:1|max:5',
-            'reel' => 'required|file|mimes:mp4,mov,avi,wmv',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif',
+            'product_id' => 'required|exists:products,id',
+            'reel_url' => 'required|file|mimes:mp4,mov,avi,wmv|max:20480', // max 20MB
         ];
     }
 }

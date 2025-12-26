@@ -2,14 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\vendor\store\StoreController as vendorStoreController;
-use App\Http\Controllers\vendor\auth\AuthController as VendorAuthController;
-use App\Http\Controllers\vendor\product\ProductController as vendorProductController;
+use App\Http\Controllers\delivery\OrderController;
+use App\Http\Controllers\vendor\reels\ReelController;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
 use App\Http\Controllers\client\OrderController as ClientOrderController;
 use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
+<<<<<<< HEAD
+use App\Http\Controllers\vendor\auth\AuthController as VendorAuthController;
+use App\Http\Controllers\vendor\store\StoreController as vendorStoreController;
+use App\Http\Controllers\vendor\product\ProductController as vendorProductController;
+
+
+=======
 use App\Http\Controllers\delivery\OrderController as DeliveryOrderController;
 use App\Models\Delivery;
+>>>>>>> 380ca4748fc1d3de20166ff6020c5a022dcbbf17
 
 Route::prefix('vendor')->group(function () {
     // Vendor Auth Routes ----------------------------------------------------------
@@ -33,6 +40,14 @@ Route::prefix('vendor')->group(function () {
             Route::put('/update/{product}', [vendorProductController::class, 'update']);
             Route::delete('/delete/{product}', [vendorProductController::class, 'destroy']);
             Route::delete('/removeImage/{image}', [vendorProductController::class, 'removeImage']);
+            Route::delete('/removeReel/{reel}', [vendorProductController::class, 'removeReel']);
+        });
+        // Reel Routes--------------------------------------------------------------
+        Route::prefix('reels')->group(function () {
+            Route::get('/', [ReelController::class, 'index']);
+            Route::post('/add', [ReelController::class, 'store']);
+            Route::get('/{reel}', [ReelController::class, 'show']);
+            Route::delete('/delete/{reel}', [ReelController::class, 'destroy']);
         });
     });
 });
@@ -45,12 +60,17 @@ Route::prefix('client')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('/create', [ClientOrderController::class, 'create']);
             Route::get('/get', [ClientOrderController::class, 'index']);
+<<<<<<< HEAD
+        });
+
+=======
             Route::delete('/deleteCart/{cart}', [ClientOrderController::class, 'deleteCart']);
             Route::post('/confirm/{order}', [ClientOrderController::class, 'confirm_order']);
             Route::get('/allOrders', [ClientOrderController::class, 'showOrders']);
             Route::put('/updateCartQuantity/{cart}', [ClientOrderController::class, 'update_cart_quantity']);
             Route::put('/cancelOrder/{order}', [ClientOrderController::class, 'CancelOrder']);
         });
+>>>>>>> 380ca4748fc1d3de20166ff6020c5a022dcbbf17
     });
 });
 
