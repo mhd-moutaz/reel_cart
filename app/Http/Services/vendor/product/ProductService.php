@@ -39,10 +39,29 @@ class ProductService
         DB::beginTransaction();
         try {
             $productData = $data;
-            unset($productData['image_url']); // إزالة الصور من بيانات المنتج
-            $productData['store_id'] = Auth::user()->vendor->store->id;
+            unset($productData['images']);
+            unset($productData['reel']);
+
+            // vendor_id دائماً موجود
+            $vendorId = Auth::user()->vendor->id;
+            $productData['vendor_id'] = $vendorId;
+
+            // store_id اختياري
+            if (Auth::check() && Auth::user()->vendor && Auth::user()->vendor->store) {
+                $productData['store_id'] = Auth::user()->vendor->store->id;
+            } else {
+                $productData['store_id'] = null;
+            }
+
             $product = Product::create($productData);
-            $reelPath = $data['reel']->storeAs('reels', $product->id . '.' . $product->vendor_id . '.mp4', 'public');
+
+            // رفع الـ Reel
+            $reelPath = $data['reel']->storeAs(
+                'reels',
+                $product->id . '.' . $vendorId . '.mp4',
+                'public'
+            );
+
             Reel::create([
                 'video_url' => $reelPath,
                 'product_id' => $product->id,
@@ -58,13 +77,14 @@ class ProductService
                     ]);
                 }
             }
+
             DB::commit();
-            $product->load('reels', 'images', 'store');
+            $product->load('reels', 'images', 'store', 'vendor');
             return $product;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Product creation failed: ' . $e->getMessage());
-            throw new GeneralException('add product failed: ' . $e->getMessage());
+            throw new GeneralException('Add product failed: ' . $e->getMessage());
         }
     }
     public function update(array $data, $productId)

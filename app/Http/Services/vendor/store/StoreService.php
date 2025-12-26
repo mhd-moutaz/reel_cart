@@ -13,13 +13,16 @@ class StoreService
 {
     public function show()
     {
-        $vendor = Auth::user()->vendor;
-        return $vendor->store;
+        $store = Auth::user()->vendor->store;
+        if (!$store) {
+            throw new GeneralException('you don\'t have a store.');
+        }
+        return $store;
     }
     public function store(array $data)
     {
         if (Auth::user()->vendor->store) {
-            throw new GeneralException('Store already exists for this vendor.');
+            throw new GeneralException('you already have a store.');
         }
         $data['vendor_id'] = Auth::id();
         if (isset($data['image'])) {
@@ -30,10 +33,11 @@ class StoreService
         return $store;
     }
 
-    public function update(array $data){
+    public function update(array $data)
+    {
         $store = Auth::user()->vendor->store;
         if (!$store) {
-            throw new GeneralException('Store does not exist for this vendor.');
+            throw new GeneralException('you don\'t have a store.');
         }
         if (isset($data['image'])) {
             Storage::disk('public')->delete($store->image);
@@ -43,5 +47,4 @@ class StoreService
         $store->update($data);
         return $store;
     }
-
 }
