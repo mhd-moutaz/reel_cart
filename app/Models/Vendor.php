@@ -23,4 +23,8 @@ class Vendor extends Model
     {
         return $this->hasOne(Store::class);
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

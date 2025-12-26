@@ -8,6 +8,7 @@ class Product extends Model
 {
     protected $fillable = [
         'store_id',
+        'vendor_id',
         'title',
         'description',
         'price',
@@ -37,5 +38,9 @@ class Product extends Model
     public function store()
     {
         return $this->belongsTo(Store::class);
+    }
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
     }
 }

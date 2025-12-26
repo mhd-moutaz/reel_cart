@@ -19,31 +19,34 @@ class ProductController extends Controller
     {
         $this->productService = $productService;
     }
-    public function index(){
+    public function index()
+    {
         $product = $this->productService->index();
-        return $this->success( ProductResource::collection($product), 200);
+        return $this->success(ProductResource::collection($product), 200);
     }
-    public function show(Product $product){
+    public function show(Product $product)
+    {
         $product = $this->productService->show($product);
         return $this->success(new ProductResource($product), 200);
     }
-    public function store(StoreProductRequest $request){
+    public function store(StoreProductRequest $request)
+    {
         $product = $this->productService->store($request->validated());
         return $this->success(new ProductResource($product), 201);
     }
-    public function update(UpdateProductRequest $request, Product $product){
+    public function update(UpdateProductRequest $request, Product $product)
+    {
         $product = $this->productService->update($request->validated(), $product);
         return $this->success(new ProductResource($product), 200);
-
     }
     public function removeImage(Image $image)
     {
         $this->productService->removeImage($image);
-        return $this->success([], 'Image removed successfully',200);
+        return $this->success([], 'Image removed successfully', 200);
     }
-    public function destroy(Product $product){
+    public function destroy(Product $product)
+    {
         $this->productService->destroy($product);
-        return $this->success([], 'Product deleted successfully',200);
-
+        return $this->success([], 'Product deleted successfully', 200);
     }
 }

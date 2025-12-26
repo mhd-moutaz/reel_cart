@@ -22,13 +22,14 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-
-            'image_url' => 'required',
             'title' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|decimal:0,1000000',
             'quantity' => 'required|integer',
             'average_rating' => 'required|integer|min:1|max:5',
+            'reel' => 'required|file|mimes:mp4,mov,avi,wmv',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif',
         ];
     }
 }
