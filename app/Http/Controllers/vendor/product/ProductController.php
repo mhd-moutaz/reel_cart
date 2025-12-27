@@ -39,11 +39,6 @@ class ProductController extends Controller
         $product = $this->productService->update($request->validated(), $product);
         return $this->success(new ProductResource($product), 200);
     }
-    public function removeImage(Image $image)
-    {
-        $this->productService->removeImage($image);
-        return $this->success([], 'Image removed successfully', 200);
-    }
     public function destroy(Product $product)
     {
         $this->productService->destroy($product);

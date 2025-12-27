@@ -42,11 +42,7 @@ class ProductService
             unset($productData['images']);
             unset($productData['reel']);
 
-            // vendor_id دائماً موجود
-            $vendorId = Auth::user()->vendor->id;
-            $productData['vendor_id'] = $vendorId;
-
-            // store_id اختياري
+            $productData['vendor_id'] = Auth::user()->vendor->id;
             if (Auth::check() && Auth::user()->vendor && Auth::user()->vendor->store) {
                 $productData['store_id'] = Auth::user()->vendor->store->id;
             } else {
@@ -55,19 +51,12 @@ class ProductService
 
             $product = Product::create($productData);
 
-            // رفع الـ Reel
-            $reelPath = $data['reel']->storeAs(
-                'reels',
-                $product->id . '.' . $vendorId . '.mp4',
-                'public'
-            );
-
+            $reelPath = $data['reel']->storeAs('reels', $product->id . '.' . ($product->vendor_id ?? 'no-vendor') . '.mp4', 'public');
             Reel::create([
                 'video_url' => $reelPath,
                 'product_id' => $product->id,
             ]);
 
-            // حفظ الصور (اختياري)
             if (isset($data['images']) && is_array($data['images']) && count($data['images']) > 0) {
                 foreach ($data['images'] as $image) {
                     $imagePath = $image->store('products', 'public');
@@ -79,12 +68,12 @@ class ProductService
             }
 
             DB::commit();
-            $product->load('reels', 'images', 'store', 'vendor');
+            $product->load('reels', 'images');
             return $product;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Product creation failed: ' . $e->getMessage());
-            throw new GeneralException('Add product failed: ' . $e->getMessage());
+            throw new GeneralException('add product failed: ' . $e->getMessage());
         }
     }
     public function update(array $data, $productId)
@@ -99,23 +88,18 @@ class ProductService
                 throw new GeneralException('Unauthorized to update this product');
             }
 
-            // تحضير البيانات للتحديث
             $productData = $data;
             unset($productData['images']);
             unset($productData['reel']);
             unset($productData['replace_images']);
             unset($productData['delete_image_ids']);
 
-            // vendor_id دائماً موجود ولا يتغير
-            // store_id اختياري ويمكن تحديثه
             if (isset($data['store_id'])) {
                 $productData['store_id'] = $data['store_id'];
             }
 
-            // تحديث بيانات المنتج الأساسية
             $product->update($productData);
 
-            // تحديث الـ Reel إذا تم إرساله
             if (isset($data['reel'])) {
                 // حذف الـ Reel القديم من التخزين
                 $oldReel = $product->reels()->first();
@@ -123,14 +107,12 @@ class ProductService
                     Storage::disk('public')->delete($oldReel->video_url);
                 }
 
-                // رفع الـ Reel الجديد
                 $reelPath = $data['reel']->storeAs(
                     'reels',
                     $product->id . '.' . $product->vendor_id . '.mp4',
                     'public'
                 );
 
-                // تحديث أو إنشاء الـ Reel في قاعدة البيانات
                 if ($oldReel) {
                     $oldReel->update(['video_url' => $reelPath]);
                 } else {
