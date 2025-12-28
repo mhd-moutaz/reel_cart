@@ -25,7 +25,7 @@ class UpdateProductRequest extends FormRequest
             'store_id' => 'sometimes|nullable|exists:stores,id',
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
-            'price' => 'sometimes|numeric|min:0|max:1000000',
+            'price' => 'sometimes|numeric|min:0 ',
             'quantity' => 'sometimes|integer|min:0',
             'average_rating' => 'sometimes|integer|min:1|max:5',
             'reel' => 'sometimes|file|mimes:mp4,mov,avi,wmv|max:51200', // max 50MB

@@ -34,17 +34,10 @@ Route::prefix('vendor')->group(function () {
             Route::get('/', [vendorProductController::class, 'index']);
             Route::post('/add', [vendorProductController::class, 'store']);
             Route::get('/{product}', [vendorProductController::class, 'show']);
-            Route::put('/update/{product}', [vendorProductController::class, 'update']);
+            Route::post('/update/{product}', [vendorProductController::class, 'update']);
             Route::delete('/delete/{product}', [vendorProductController::class, 'destroy']);
             Route::delete('/removeImage/{image}', [vendorProductController::class, 'removeImage']);
             Route::delete('/removeReel/{reel}', [vendorProductController::class, 'removeReel']);
-        });
-        // Reel Routes--------------------------------------------------------------
-        Route::prefix('reels')->group(function () {
-            Route::get('/', [ReelController::class, 'index']);
-            Route::post('/add', [ReelController::class, 'store']);
-            Route::get('/{reel}', [ReelController::class, 'show']);
-            Route::delete('/delete/{reel}', [ReelController::class, 'destroy']);
         });
     });
 });
