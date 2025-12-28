@@ -18,26 +18,15 @@ class ReelController extends Controller
         $this->reelService = $reelService;
     }
 
-    public function index()
+    public function store($reel, $product)
     {
-        $reels = $this->reelService->index();
-        return $this->success(ReelResource::collection($reels),'Reels retrieved successfully',200);
+        $reel = $this->reelService->store($reel, $product);
+        return true;
     }
-    public function show(Reel $reel)
+    public function update($reel, $product)
     {
-        $reel = $this->reelService->show($reel);
-        return $this->success(new ReelResource($reel),'Reel retrieved successfully',200);
-    }
-    public function store(StoreReelRequest $request)
-    {
-        $reel = $this->reelService->store($request->validated());
-        return $this->success(new ReelResource($reel),'Reel created successfully',201);
-    }
-
-    public function destroy(Reel $reel)
-    {
-        $this->reelService->destroy($reel);
-        return $this->success([],'Reel deleted successfully',200);
+        $reel = $this->reelService->update($reel, $product);
+        return true;
     }
 
 }

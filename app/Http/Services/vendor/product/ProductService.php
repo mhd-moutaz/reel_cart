@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\GeneralException;
+use App\Http\Controllers\vendor\reels\ReelController;
 use App\Models\Reel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
+    protected $reelController;
+    public function __construct(ReelController $reelController)
+    {
+        $this->reelController = $reelController;
+    }
     public function index()
     {
         $products = Auth::user()->vendor->products;
@@ -43,12 +49,7 @@ class ProductService
             }
 
             $product = Product::create($productData);
-
-            $reelPath = $data['reel']->storeAs('reels', $product->id . '.' . $product->vendor_id . '.mp4', 'public');
-            Reel::create([
-                'video_url' => $reelPath,
-                'product_id' => $product->id,
-            ]);
+            $this->reelController->store($data['reel'], $product);
 
             if (isset($data['images']) && is_array($data['images']) && count($data['images']) > 0) {
                 foreach ($data['images'] as $image) {
@@ -93,51 +94,34 @@ class ProductService
             if (!empty($productData)) {
                 $product->update($productData);
             }
-
-            // تحديث الـ Reel
-            if (isset($data['reel']) && $data['reel']) {
-                $oldReel = Reel::where('product_id', $product->id)->first();
-
-                $newFileName = 'product_' . $product->id . '.mp4';
-                $reelPath = $data['reel']->storeAs('reels', $product->id . '.' . $product->vendor_id . '.mp4', 'public');
-
-                if ($oldReel) {
-                    if (Storage::disk('public')->exists($oldReel->video_url)) {
-                        Storage::disk('public')->delete($oldReel->video_url);
-                    }
-
-                    $affectedRows = DB::table('reels')
-                        ->where('id', $oldReel->id)
-                        ->update([
-                            'video_url' => $reelPath,
-                            'updated_at' => now()
-                        ]);
-                }
-
-                if (isset($data['images']) && is_array($data['images']) && count($data['images']) > 0) {
-
-                    if (isset($data['replace_images']) && $data['replace_images'] == true) {
-                        foreach ($product->images as $oldImage) {
-                            if (Storage::disk('public')->exists($oldImage->image_url)) {
-                                Storage::disk('public')->delete($oldImage->image_url);
-                            }
-                            $oldImage->delete();
-                        }
-                    }
-
-                    foreach ($data['images'] as $image) {
-                        $imagePath = $image->storeAs('products',  $product->id . '.' . $product->vendor_id . '.jpg', 'public');
-                        Image::create([
-                            'product_id' => $product->id,
-                            'image_url' => $imagePath,
-                        ]);
-                    }
-                }
-
-                DB::commit();
-                $product->refresh();
-                $product->load('reels', 'images', 'store', 'vendor');
+            if (isset($data['reel'])) {
+                $this->reelController->update($data['reel'], $product);
             }
+
+            if (isset($data['images']) && is_array($data['images']) && count($data['images']) > 0) {
+
+                if (isset($data['replace_images']) && $data['replace_images'] == true) {
+                    foreach ($product->images as $oldImage) {
+                        if (Storage::disk('public')->exists($oldImage->image_url)) {
+                            Storage::disk('public')->delete($oldImage->image_url);
+                        }
+                        $oldImage->delete();
+                    }
+                }
+
+                foreach ($data['images'] as $image) {
+                    $imagePath = $image->storeAs('products',  $product->id . '.' . $product->vendor_id . '.jpg', 'public');
+                    Image::create([
+                        'product_id' => $product->id,
+                        'image_url' => $imagePath,
+                    ]);
+                }
+            }
+
+            DB::commit();
+            $product->refresh();
+            $product->load('reels', 'images', 'store', 'vendor');
+            // }
 
             return $product;
         } catch (\Exception $e) {
@@ -150,6 +134,23 @@ class ProductService
         }
     }
 
+    public function changeStatus($product, $quantity)
+    {
+        if ($product->quantity < $quantity) {
+            throw new GeneralException('The requested quantity is not available', 400);
+        } else if ($product->quantity == $quantity) {
+            $product->quantity = 0;
+            $reel = Reel::where('product_id', $product->id)->first();
+            $product->quantity = 0;
+            $reel->status = false;
+            $reel->save();
+            $product->save();
+        } else {
+            $product->quantity -= $quantity;
+            $product->save();
+        }
+        return true;
+    }
     public function destroy($product)
     {
         try {

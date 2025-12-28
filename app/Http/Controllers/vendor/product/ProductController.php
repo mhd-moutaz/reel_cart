@@ -44,4 +44,9 @@ class ProductController extends Controller
         $this->productService->destroy($product);
         return $this->success([], 'Product deleted successfully', 200);
     }
+    public function changeStatus(Product $product, $quantity)
+    {
+        $this->productService->changeStatus($product, $quantity);
+        return $this->success([], 'Product status changed successfully', 200);
+    }
 }

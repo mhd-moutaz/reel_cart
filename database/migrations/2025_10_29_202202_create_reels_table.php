@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->text('reel_url');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

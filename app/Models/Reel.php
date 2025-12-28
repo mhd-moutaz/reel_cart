@@ -9,6 +9,7 @@ class Reel extends Model
     protected $fillable = [
         'product_id',
         'video_url',
+        'status'
     ];
 
     public function product()

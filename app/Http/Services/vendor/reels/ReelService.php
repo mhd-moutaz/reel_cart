@@ -18,36 +18,25 @@ class ReelService
     {
         //
     }
-
-    public function index(){
-        // return Auth::user()->vendor->store->products->reels;
-        return Auth::user()->vendor->store->products()->with('reels')->get();
-
-    }
-    public function show($reel){
-        if ($reel->store->vendor->id !== Auth::user()->vendor->id) {
-            throw new GeneralException('unauthorized access to this reel', 403);
-        }
-        return $reel;
-    }
-    public function store(array $data){
-        $product = Auth::user()->vendor->store->products->find($data['product_id']);
-        if (!$product) {
-            throw new GeneralException('unauthorized access to this product', 403);
-        }
+    public function store($reel, $product)
+    {
         $reel = Reel::create([
-            'product_id' => $data['product_id'],
-            'reel_url' => $data['reel_url']->store('reels', 'public'),
+            'product_id' => $product->id,
+            'video_url' => $reel->storeAs('reels', $product->id . '.' . $product->vendor_id . '.mp4', 'public'),
         ]);
         return $reel;
     }
-    public function destroy($reel){
-        if ($reel->product->store->vendor->id !== Auth::user()->vendor->id) {
-            throw new GeneralException('unauthorized access to this reel', 403);
-        }
-        Storage::disk('public')->delete($reel->reel_url);
+    public function update($reel, $product)
+    {
+        $oldreel = Reel::where('product_id', $product->id)->first();
+        $this->destroy($oldreel);
+        $reel = $this->store($reel, $product);
+        return $reel;
+    }
+    public function destroy($reel)
+    {
+        Storage::disk('public')->delete($reel->video_url);
         $reel->delete();
         return true;
     }
-
 }
