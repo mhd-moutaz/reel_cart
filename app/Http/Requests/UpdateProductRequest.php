@@ -31,7 +31,6 @@ class UpdateProductRequest extends FormRequest
             'reel' => 'sometimes|file|mimes:mp4,mov,avi,wmv|max:51200', // max 50MB
             'images' => 'sometimes|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // max 5MB
-            'replace_images' => 'sometimes|boolean', // لاستبدال جميع الصور
             'delete_image_ids' => 'sometimes|array', // لحذف صور محددة
             'delete_image_ids.*' => 'integer|exists:images,id',
         ];

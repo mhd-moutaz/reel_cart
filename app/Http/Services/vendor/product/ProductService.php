@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\GeneralException;
+use App\Http\Controllers\vendor\reels\ImageController;
 use App\Http\Controllers\vendor\reels\ReelController;
 use App\Models\Reel;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +15,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
-    protected $reelController;
-    public function __construct(ReelController $reelController)
+    protected $reelController, $imageController;
+    public function __construct(ReelController $reelController, ImageController $imageController)
     {
         $this->reelController = $reelController;
+        $this->imageController = $imageController;
     }
     public function index()
     {
@@ -52,12 +54,9 @@ class ProductService
             $this->reelController->store($data['reel'], $product);
 
             if (isset($data['images']) && is_array($data['images']) && count($data['images']) > 0) {
-                foreach ($data['images'] as $image) {
-                    $imagePath = $image->store('products', 'public');
-                    Image::create([
-                        'product_id' => $product->id,
-                        'image_url' => $imagePath,
-                    ]);
+                foreach ($data['images'] as $key => $image) {
+                    $numberOfImages = $key + 1;
+                    $this->imageController->storeNewImage($product, $image, $numberOfImages);
                 }
             }
 
@@ -98,23 +97,22 @@ class ProductService
                 $this->reelController->update($data['reel'], $product);
             }
 
-            if (isset($data['images']) && is_array($data['images']) && count($data['images']) > 0) {
 
-                if (isset($data['replace_images']) && $data['replace_images'] == true) {
-                    foreach ($product->images as $oldImage) {
-                        if (Storage::disk('public')->exists($oldImage->image_url)) {
-                            Storage::disk('public')->delete($oldImage->image_url);
-                        }
-                        $oldImage->delete();
+            if (isset($data['delete_image_ids']) && is_array($data['delete_image_ids'])) {
+                foreach ($data['delete_image_ids'] as $oldImageid) {
+                    $oldImage = Image::findOrFail($oldImageid);
+                    if ($oldImage->product_id === $product->id) {
+                        $this->imageController->destroyImage($oldImage);
+                    } else {
+                        throw new GeneralException(["This image is not for this product"]);
                     }
                 }
+            }
 
-                foreach ($data['images'] as $image) {
-                    $imagePath = $image->storeAs('products',  $product->id . '.' . $product->vendor_id . '.jpg', 'public');
-                    Image::create([
-                        'product_id' => $product->id,
-                        'image_url' => $imagePath,
-                    ]);
+            if (isset($data['images']) && is_array($data['images'])) {
+                foreach ($data['images'] as $key => $image) {
+                    $numberOfImages = $key + 1;
+                    $this->imageController->storeNewImage($product, $image, $numberOfImages);
                 }
             }
 
