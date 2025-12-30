@@ -45,6 +45,7 @@ class UpdateProductRequest extends FormRequest
             'store_id.exists' => 'The selected store does not exist',
             'reel.max' => 'The reel size must not exceed 50MB',
             'images.*.max' => 'Each image must not exceed 5MB',
+            'delete_image_ids.*.exists' => 'One or more image IDs do not exist',
         ];
     }
 }

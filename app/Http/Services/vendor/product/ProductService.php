@@ -104,14 +104,14 @@ class ProductService
                     if ($oldImage->product_id === $product->id) {
                         $this->imageController->destroyImage($oldImage);
                     } else {
-                        throw new GeneralException(["This image is not for this product"]);
+                        throw new GeneralException("This image is not for this product");
                     }
                 }
             }
 
             if (isset($data['images']) && is_array($data['images'])) {
                 foreach ($data['images'] as $key => $image) {
-                    $numberOfImages = $key + 1;
+                    $numberOfImages = $key ;
                     $this->imageController->storeNewImage($product, $image, $numberOfImages);
                 }
             }
