@@ -23,6 +23,7 @@ Route::prefix('vendor')->group(function () {
     Route::middleware('auth:api')->group(function () {
         // Vendor Auth Routes--------------------------------------------------------
         Route::post('/logout', [VendorAuthController::class, 'logout']);
+        Route::get('/profile', [VendorAuthController::class, 'showProfileDetails']);
         // Store Routes--------------------------------------------------------------
         Route::prefix('stores')->group(function () {
             Route::get('/', [vendorStoreController::class, 'show']);
@@ -47,6 +48,7 @@ Route::prefix('client')->group(function () {
     Route::post('/login', [ClientAuthController::class, 'login']);
     Route::middleware('auth:api')->group(function () {
         Route::post('/logout', [ClientAuthController::class, 'logout']);
+        Route::get('/profile', [ClientAuthController::class, 'showProfileDetails']);
         Route::prefix('orders')->group(function () {
             Route::post('/create', [ClientOrderController::class, 'create']);
             Route::get('/get', [ClientOrderController::class, 'index']);

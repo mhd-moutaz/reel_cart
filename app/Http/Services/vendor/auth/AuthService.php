@@ -4,6 +4,7 @@ namespace App\Http\Services\vendor\auth;
 
 use App\Models\User;
 use App\Enums\RoleUserEnum;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +39,7 @@ class AuthService
             return $vendor;
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception('Registration failed' );
+            throw new \Exception('Registration failed');
         }
     }
     public function loginVendor(array $data)
@@ -52,5 +53,11 @@ class AuthService
     public function logoutVendor()
     {
         Auth::logout();
+    }
+    public function Profile()
+    {
+        $profile = Vendor::where('user_id', Auth::user()->id)->first();
+        $profile->load('store','products','user');
+        return $profile;
     }
 }

@@ -33,6 +33,8 @@ class UpdateProductRequest extends FormRequest
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // max 5MB
             'delete_image_ids' => 'sometimes|array', // لحذف صور محددة
             'delete_image_ids.*' => 'integer|exists:images,id',
+            'categories' => 'sometimes|array|min:1',
+            'categories.*' => 'exists:categories,id',
         ];
     }
 

@@ -24,20 +24,18 @@ class AuthService
                 'role' => RoleUserEnum::Client,
             ]);
 
-            if(isset($data['image']))
-            {
-                $image_path = $data['image']->store('clients','public');
+            if (isset($data['image'])) {
+                $image_path = $data['image']->store('clients', 'public');
             }
             $client = $user->client()->create([
                 'birth_date' => $data['birth_date'],
                 'gender' => $data['gender'],
                 'address' => $data['address'],
-                'image' => $image_path,
+                'image' => $image_path ?? null,
             ]);
 
             DB::commit();
             return $client;
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
@@ -54,5 +52,10 @@ class AuthService
     public function logoutClient()
     {
         Auth::logout();
+    }
+    public function Profile()
+    {
+        $profile = Client::where('user_id', Auth::user()->id)->first();
+        return $profile;
     }
 }

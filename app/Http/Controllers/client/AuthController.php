@@ -34,4 +34,9 @@ class AuthController extends Controller
         $this->authService->logoutClient();
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
+    public function showProfileDetails()
+    {
+        $profile = $this->authService->Profile();
+        return response()->json(['message' => 'Profile details retrieved successfully', 'profile' => $profile], 200);
+    }
 }

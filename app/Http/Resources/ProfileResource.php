@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReelResource extends JsonResource
+class ProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,13 @@ class ReelResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'video_url' => $this->video_url,
-            'product' => $this->product->id,
+            'name' => $this->user->name,
+            'email' => $this->user->email,
+            'phone_number' => $this->user->phone_number,
+            'birth_date' => $this->birth_date,
+            'gender' => $this->gender,
+            'address' => $this->address,
+            'image' => $this->image,
         ];
     }
 }

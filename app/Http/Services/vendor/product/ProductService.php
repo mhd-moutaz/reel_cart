@@ -50,9 +50,18 @@ class ProductService
                 $productData['store_id'] = null;
             }
 
+            //Product
             $product = Product::create($productData);
+
+            //Category
+            if (isset($data['categories']) && is_array($data['categories'])) {
+                $product->categories()->attach($data['categories']);
+            }
+
+            //Reel
             $this->reelController->store($data['reel'], $product);
 
+            //Images
             if (isset($data['images']) && is_array($data['images']) && count($data['images']) > 0) {
                 foreach ($data['images'] as $key => $image) {
                     $numberOfImages = $key + 1;
@@ -61,7 +70,7 @@ class ProductService
             }
 
             DB::commit();
-            $product->load('reels', 'images');
+            $product->load('reels', 'images', 'categories');
             return $product;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -109,9 +118,13 @@ class ProductService
                 }
             }
 
+            if (isset($data['categories']) && is_array($data['categories'])) {
+                $product->categories()->sync($data['categories']);
+            }
+
             if (isset($data['images']) && is_array($data['images'])) {
                 foreach ($data['images'] as $key => $image) {
-                    $numberOfImages = $key ;
+                    $numberOfImages = $key;
                     $this->imageController->storeNewImage($product, $image, $numberOfImages);
                 }
             }
@@ -119,7 +132,6 @@ class ProductService
             DB::commit();
             $product->refresh();
             $product->load('reels', 'images', 'store', 'vendor');
-            // }
 
             return $product;
         } catch (\Exception $e) {

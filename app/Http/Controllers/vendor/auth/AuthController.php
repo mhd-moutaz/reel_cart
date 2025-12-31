@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Global\loginRequest;
 use App\Http\Requests\vendor\registerRequest;
+use App\Http\Resources\ProfileResource;
+use App\Http\Resources\VendorProfileResource;
 use App\Http\Services\vendor\auth\AuthService;
 
 class AuthController extends Controller
@@ -40,13 +42,9 @@ class AuthController extends Controller
         $this->authService->logoutVendor();
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
+    public function showProfileDetails()
+    {
+        $profile = $this->authService->Profile();
+        return response()->json(['message' => 'Profile details retrieved successfully', 'profile' => new VendorProfileResource($profile)], 200);
+    }
 }
-
-
-
-
-
-
-
-
-
