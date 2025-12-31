@@ -131,6 +131,7 @@ class OrderService
             }
             $order->status = StatusOrderEnum::Processing;
             $order->save();
+            DB::commit();
             return $order;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -145,10 +146,12 @@ class OrderService
     }
     public function cancelOrder($order)
     {
-        if ($order->status === StatusOrderEnum::Pending || $order->status === StatusOrderEnum::Processing) {
+        if ($order->status === StatusOrderEnum::Pending) {
             $order->status = StatusOrderEnum::Cancelled;
             $order->save();
             return $order;
+        } else {
+            throw new GeneralException('Only pending orders can be cancelled.', 400);
         }
     }
 }
