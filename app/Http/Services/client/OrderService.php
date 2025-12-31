@@ -23,11 +23,19 @@ class OrderService
     //-----------------------------------------------------------------------------------------------------------------Cart
     public function removeCart($cart)
     {
-        $order = $cart->order;
-        $order->total_price -= $cart->sub_total;
-        $order->save();
-        $cart->delete();
-        return true;
+        if ($cart->order->client_id !== Client::where('user_id', Auth::id())->first()->id) {
+            throw new GeneralException('This cart item does not belong to your order.', 400);
+        }
+
+        if ($cart->order->status === StatusOrderEnum::Pending) {
+            $order = $cart->order;
+            $order->total_price -= $cart->sub_total;
+            $order->save();
+            $cart->delete();
+            return true;
+        } else {
+            throw new GeneralException('Cannot remove items from a not pending order.', 400);
+        }
     }
     public function updateCartQuantity(Cart $cart, int $quantity)
     {
@@ -52,7 +60,7 @@ class OrderService
         try {
             $client = Client::where('user_id', Auth::id())->first();
             if (!$client) {
-                throw new \Exception('Client not found for this user.');
+                throw new GeneralException('Client not found for this user.');
             }
 
             $order = Order::where('client_id', $client->id)
@@ -68,17 +76,17 @@ class OrderService
             $product = Product::find($data['product_id']);
 
             if (!$product) {
-                throw new \Exception('Product not found.');
+                throw new GeneralException('Product not found.');
             }
             if ($data['quantity'] > $product->quantity) {
-                throw new \Exception('Product stock not available.');
+                throw new GeneralException('Product stock not available.');
             }
 
             $check_cart = Cart::where('order_id', $order->id)
                 ->where('product_id', $product->id)
                 ->first();
             if ($check_cart) {
-                throw new \Exception('Product already in cart, please update quantity instead.');
+                throw new GeneralException('Product already in cart, please update quantity instead.');
             }
             $cart = Cart::create([
                 'order_id'   => $order->id,
@@ -144,14 +152,17 @@ class OrderService
         $orders = Order::where('client_id', $client->id)->get();
         return $orders;
     }
-    public function cancelOrder($order)
+    public function cancelOrder()
     {
-        if ($order->status === StatusOrderEnum::Pending) {
+        $order = Order::where('client_id', Client::where('user_id', Auth::id())->first()->id)
+            ->where('status', StatusOrderEnum::Pending)
+            ->first();
+        if ($order) {
             $order->status = StatusOrderEnum::Cancelled;
             $order->save();
             return $order;
         } else {
-            throw new GeneralException('Only pending orders can be cancelled.', 400);
+            throw new GeneralException('you dont have any pending order to cancel', 400);
         }
     }
 }

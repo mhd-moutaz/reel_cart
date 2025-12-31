@@ -45,12 +45,12 @@ class OrderController extends Controller
     }
     public function update_cart_quantity(Request $request, Cart $cart)
     {
-        $cart = $this->orderservice->updateCartQuantity($cart, (int)$request->input('quantity'));
+        $cart = $this->orderservice->updateCartQuantity($cart, $request->quantity);
         return $this->success(['Cart item updated successfully', new CartResource($cart)], 200);
     }
-    public function CancelOrder(Order $order)
+    public function CancelOrder()
     {
-        $order = $this->orderservice->cancelOrder($order);
+        $order = $this->orderservice->cancelOrder();
         return $this->success(['Order cancelled successfully', new OrderResource($order)], 200);
     }
 }

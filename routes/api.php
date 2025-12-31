@@ -6,6 +6,7 @@ use App\Http\Controllers\delivery\OrderController;
 use App\Http\Controllers\vendor\reels\ReelController;
 use App\Http\Controllers\client\AuthController as ClientAuthController;
 use App\Http\Controllers\client\OrderController as ClientOrderController;
+use App\Http\Controllers\client\ReelController as ClientReelController;
 use App\Http\Controllers\delivery\AuthController as DeliveryAuthController;
 use App\Http\Controllers\vendor\auth\AuthController as VendorAuthController;
 use App\Http\Controllers\vendor\store\StoreController as vendorStoreController;
@@ -47,6 +48,7 @@ Route::prefix('vendor')->group(function () {
 Route::prefix('client')->group(function () {
     Route::post('/register', [ClientAuthController::class, 'register']);
     Route::post('/login', [ClientAuthController::class, 'login']);
+    Route::get('/Reels', [ClientReelController::class, 'scrollReels']);
     Route::middleware('auth:api')->group(function () {
         Route::post('/logout', [ClientAuthController::class, 'logout']);
         Route::get('/profile', [ClientAuthController::class, 'showProfileDetails']);
