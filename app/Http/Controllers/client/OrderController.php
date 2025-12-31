@@ -38,9 +38,9 @@ class OrderController extends Controller
         $this->orderservice->removeCart($cart);
         return $this->success(['Cart item removed successfully'], 200);
     }
-    public function confirm_order(Order $order)
+    public function confirm_order()
     {
-        $order = $this->orderservice->confirmOrder($order);
+        $order = $this->orderservice->confirmOrder();
         return $this->success(['Order confirmed successfully', new OrderResource($order)], 200);
     }
     public function update_cart_quantity(Request $request, Cart $cart)

@@ -24,6 +24,7 @@ Route::prefix('vendor')->group(function () {
         // Vendor Auth Routes--------------------------------------------------------
         Route::post('/logout', [VendorAuthController::class, 'logout']);
         Route::get('/profile', [VendorAuthController::class, 'showProfileDetails']);
+
         // Store Routes--------------------------------------------------------------
         Route::prefix('stores')->group(function () {
             Route::get('/', [vendorStoreController::class, 'show']);
@@ -52,13 +53,13 @@ Route::prefix('client')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::post('/create', [ClientOrderController::class, 'create']);
             Route::get('/get', [ClientOrderController::class, 'index']);
+            Route::delete('/deleteCart/{cart}', [ClientOrderController::class, 'deleteCart']);
+            Route::post('/confirm', [ClientOrderController::class, 'confirm_order']);
+            Route::get('/allOrders', [ClientOrderController::class, 'showOrders']);
+            Route::put('/updateCartQuantity/{cart}', [ClientOrderController::class, 'update_cart_quantity']);
+            Route::put('/cancelOrder/{order}', [ClientOrderController::class, 'CancelOrder']);
         });
 
-        Route::delete('/deleteCart/{cart}', [ClientOrderController::class, 'deleteCart']);
-        Route::post('/confirm/{order}', [ClientOrderController::class, 'confirm_order']);
-        Route::get('/allOrders', [ClientOrderController::class, 'showOrders']);
-        Route::put('/updateCartQuantity/{cart}', [ClientOrderController::class, 'update_cart_quantity']);
-        Route::put('/cancelOrder/{order}', [ClientOrderController::class, 'CancelOrder']);
     });
 });
 

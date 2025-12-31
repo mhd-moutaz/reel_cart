@@ -4,6 +4,7 @@ namespace App\Http\Services\client;
 
 use App\Enums\StatusOrderEnum;
 use App\Exceptions\GeneralException;
+use App\Http\Controllers\vendor\product\ProductController;
 use App\Models\Cart;
 use App\Models\Client;
 use App\Models\Order;
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
+    protected $productController;
+    public function __construct(ProductController $productController)
+    {
+        $this->productController = $productController;
+    }
     //-----------------------------------------------------------------------------------------------------------------Cart
     public function removeCart($cart)
     {
@@ -104,22 +110,32 @@ class OrderService
         }
         return $order;
     }
-    public function confirmOrder(Order $order)
+    public function confirmOrder()
     {
-        $cart_items = Cart::where('order_id', $order->id)->get();
-        if ($cart_items->isEmpty()) {
-            throw new GeneralException('Cannot confirm an empty order.');
-        } else {
-            foreach ($cart_items as $item) {
-                $product = Product::find($item->product_id);
-                if ($item->quantity > $product->quantity) {
-                    throw new GeneralException("Insufficient stock for product ID: {$product->id}, available quantity: {$product->quantity}.");
+        DB::beginTransaction();
+        try {
+            $order = Order::where('client_id', Client::where('user_id', Auth::id())->first()->id)
+                ->where('status', StatusOrderEnum::Pending)
+                ->first();
+            if (!$order) {
+                throw new GeneralException('No pending order found to confirm.', 404);
+            }
+            $cart_items = Cart::where('order_id', $order->id)->get();
+            if ($cart_items->isEmpty()) {
+                throw new GeneralException('Cannot confirm an empty order.');
+            } else {
+                foreach ($cart_items as $item) {
+                    $product = Product::find($item->product_id);
+                    $this->productController->changeStatus($product, $item->quantity);
                 }
             }
+            $order->status = StatusOrderEnum::Processing;
+            $order->save();
+            return $order;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-        $order->status = StatusOrderEnum::Processing;
-        $order->save();
-        return $order;
     }
     public function getAllOrders()
     {
@@ -129,7 +145,7 @@ class OrderService
     }
     public function cancelOrder($order)
     {
-        if($order->status === StatusOrderEnum::Pending || $order->status === StatusOrderEnum::Processing){
+        if ($order->status === StatusOrderEnum::Pending || $order->status === StatusOrderEnum::Processing) {
             $order->status = StatusOrderEnum::Cancelled;
             $order->save();
             return $order;

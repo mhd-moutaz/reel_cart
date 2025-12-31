@@ -47,6 +47,6 @@ class ProductController extends Controller
     public function changeStatus(Product $product, $quantity)
     {
         $this->productService->changeStatus($product, $quantity);
-        return $this->success([], 'Product status changed successfully', 200);
+        return true;
     }
 }

@@ -148,8 +148,7 @@ class ProductService
     {
         if ($product->quantity < $quantity) {
             throw new GeneralException('The requested quantity is not available', 400);
-        } else if ($product->quantity == $quantity) {
-            $product->quantity = 0;
+        } else if ($product->quantity === $quantity) {
             $reel = Reel::where('product_id', $product->id)->first();
             $product->quantity = 0;
             $reel->status = false;
