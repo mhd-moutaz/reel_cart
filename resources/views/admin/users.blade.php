@@ -40,7 +40,7 @@
     <div class="addresses-grid users-grid">
         @foreach ($users as $u)
             <div class="address-card user-card {{ $u->is_active ?? false ? 'default active' : 'inactive' }}"
-                data-name="{{ strtolower($u->name) }}" data-email="{{ strtolower($u->email) }}"
+                data-name="{{ strtolower($u->user->name) }}" data-email="{{ strtolower($u->email) }}"
                 data-role="{{ strtolower($u->role ?? '') }}">
 
                 {{-- status badge --}}
@@ -55,15 +55,15 @@
                     </div>
 
                     <div class="address-info user-info">
-                        <div class="customer-name">{{ $u->name ?? '-' }}</div>
-                        <div class="customer-phone">📧 {{ $u->email ?? '-' }}</div>
+                        <div class="customer-name">{{ $u->user->name ?? '-' }}</div>
+                        <div class="customer-phone">📧 {{ $u->user->email ?? '-' }}</div>
                     </div>
                 </div>
 
                 <div class="address-details user-details">
                     <div class="address-row">
                         <span class="address-label">الهاتف:</span>
-                        <span class="address-value">{{ $u->phone_number ?? '-' }}</span>
+                        <span class="address-value">{{ $u->user->phone_number ?? '-' }}</span>
                     </div>
 
                     <div class="address-row">

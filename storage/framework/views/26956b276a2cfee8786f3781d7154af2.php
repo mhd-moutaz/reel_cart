@@ -15,9 +15,9 @@
         </li>
 
         <li>
-            
-                <span class="icon">📍</span>
-                <span class="text">العناوين</span>
+            <a href="<?php echo e(route('admin.stores')); ?>" class="<?php echo e(request()->routeIs('admin.stores') ? 'active' : ''); ?>">
+                <span class="icon">🏪</span>
+                <span class="text">المتاجر</span>
             </a>
         </li>
 
@@ -29,9 +29,9 @@
         </li>
 
         <li>
-            
-                <span class="icon">⚙️</span>
-                <span class="text">اعدادات التصميم</span>
+            <a href="<?php echo e(route('admin.vendors') ?? '#'); ?>">
+                <span class="icon">👥</span>
+                <span class="text">البائعين</span>
             </a>
         </li>
 

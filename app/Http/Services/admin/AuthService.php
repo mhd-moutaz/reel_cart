@@ -10,14 +10,13 @@ class AuthService
 {
     public function loginAdmin(array $data)
     {
-        // إضافة شرط الـ role في عملية المصادقة
+        // استخدم web guard بشكل صريح
         $credentials = array_merge($data, ['role' => RoleUserEnum::Admin]);
 
-        $token = Auth::attempt($credentials);
-        if (!$token) {
-            throw new \Exception('Invalid credentials or unauthorized access');
+        if (Auth::guard('web')->attempt($credentials)) {
+            return true;
         }
 
-        return $token;
+        throw new \Exception('Invalid credentials or unauthorized access');
     }
 }

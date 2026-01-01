@@ -23,7 +23,7 @@
         </div>
 
         <div class="user-info">
-            <span><?php echo e(Auth::user()->user->name ?? 'المدير'); ?></span>
+            <span><?php echo e(Auth::user()->name ?? 'المدير'); ?></span>
             <form action="<?php echo e(route('admin.logout')); ?>" method="POST" style="display:inline;">
                 <?php echo csrf_field(); ?>
                 <button type="submit" class="logout-btn">🚪 تسجيل الخروج</button>

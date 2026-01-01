@@ -38,7 +38,7 @@
     <div class="addresses-grid users-grid">
         <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="address-card user-card <?php echo e($u->is_active ?? false ? 'default active' : 'inactive'); ?>"
-                data-name="<?php echo e(strtolower($u->name)); ?>" data-email="<?php echo e(strtolower($u->email)); ?>"
+                data-name="<?php echo e(strtolower($u->user->name)); ?>" data-email="<?php echo e(strtolower($u->email)); ?>"
                 data-role="<?php echo e(strtolower($u->role ?? '')); ?>">
 
                 
@@ -53,15 +53,15 @@
                     </div>
 
                     <div class="address-info user-info">
-                        <div class="customer-name"><?php echo e($u->name ?? '-'); ?></div>
-                        <div class="customer-phone">📧 <?php echo e($u->email ?? '-'); ?></div>
+                        <div class="customer-name"><?php echo e($u->user->name ?? '-'); ?></div>
+                        <div class="customer-phone">📧 <?php echo e($u->user->email ?? '-'); ?></div>
                     </div>
                 </div>
 
                 <div class="address-details user-details">
                     <div class="address-row">
                         <span class="address-label">الهاتف:</span>
-                        <span class="address-value"><?php echo e($u->phone_number ?? '-'); ?></span>
+                        <span class="address-value"><?php echo e($u->user->phone_number ?? '-'); ?></span>
                     </div>
 
                     <div class="address-row">

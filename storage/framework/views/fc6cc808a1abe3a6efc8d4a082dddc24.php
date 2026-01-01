@@ -32,7 +32,11 @@
             <div class="number"><?php echo e($products->count()); ?></div>
         </div>
 
-        
+        <div class="stat-card">
+            <div class="icon">🏪</div>
+            <h3>المحلات</h3>
+            <div class="number"><?php echo e($stores->count() ?? 0); ?></div>
+        </div>
         <div class="stat-card">
             <div class="icon">📦</div>
             <h3>الطلبات</h3>

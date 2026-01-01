@@ -34,11 +34,11 @@
             <div class="number">{{ $products->count(); }}</div>
         </div>
 
-        {{-- <div class="stat-card">
-            <div class="icon">⚙️</div>
-            <h3>خيارات التصميمات</h3>
-            <div class="number">{{ $designOptionCount ?? 0 }}</div>
-        </div> --}}
+        <div class="stat-card">
+            <div class="icon">🏪</div>
+            <h3>المحلات</h3>
+            <div class="number">{{ $stores->count() ?? 0 }}</div>
+        </div>
         <div class="stat-card">
             <div class="icon">📦</div>
             <h3>الطلبات</h3>

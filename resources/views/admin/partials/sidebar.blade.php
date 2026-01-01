@@ -15,9 +15,9 @@
         </li>
 
         <li>
-            {{-- <a href="{{ route('admin.address') }}" class="{{ request()->routeIs('admin.address') ? 'active' : '' }}"> --}}
-                <span class="icon">📍</span>
-                <span class="text">العناوين</span>
+            <a href="{{ route('admin.stores') }}" class="{{ request()->routeIs('admin.stores') ? 'active' : '' }}">
+                <span class="icon">🏪</span>
+                <span class="text">المتاجر</span>
             </a>
         </li>
 
@@ -29,9 +29,9 @@
         </li>
 
         <li>
-            {{-- <a href="{{ route('admin.design_options') ?? '#' }}"> --}}
-                <span class="icon">⚙️</span>
-                <span class="text">اعدادات التصميم</span>
+            <a href="{{ route('admin.vendors') ?? '#' }}">
+                <span class="icon">👥</span>
+                <span class="text">البائعين</span>
             </a>
         </li>
 

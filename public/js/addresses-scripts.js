@@ -132,11 +132,3 @@ window.addEventListener('keydown', function(e) {
     }
 });
 // ---------- end modal logic ----------
-```
-
----
-
-## 📂 مكان حفظ الملفات:
-```
-public/css/addresses-styles.css
-public/js/addresses-scripts.js
