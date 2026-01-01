@@ -1,8 +1,6 @@
-@extends('admin.layouts.admin-layout')
+<?php $__env->startSection('title', 'لوحة التحكم - الرئيسية'); ?>
 
-@section('title', 'لوحة التحكم - الرئيسية')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="page-header" style="background: linear-gradient(90deg,#2c3e50,#34495e);">
         <h2>لوحة التحكم — ملخص</h2>
         <div class="page-stats" style="display:flex; gap:12px;">
@@ -19,30 +17,28 @@
         <div class="stat-card">
             <div class="icon">👥</div>
             <h3>الناشرين</h3>
-            <div class="number">{{ $vendors->count();}}</div>
+            <div class="number"><?php echo e($vendors->count()); ?></div>
         </div>
 
         <div class="stat-card">
             <div class="icon">👥</div>
             <h3>المستخدمين</h3>
-            <div class="number">{{ $clients->count(); }}</div>
+            <div class="number"><?php echo e($clients->count()); ?></div>
         </div>
 
         <div class="stat-card">
             <div class="icon">👕</div>
             <h3>المنتجات</h3>
-            <div class="number">{{ $products->count(); }}</div>
+            <div class="number"><?php echo e($products->count()); ?></div>
         </div>
 
-        {{-- <div class="stat-card">
-            <div class="icon">⚙️</div>
-            <h3>خيارات التصميمات</h3>
-            <div class="number">{{ $designOptionCount ?? 0 }}</div>
-        </div> --}}
+        
         <div class="stat-card">
             <div class="icon">📦</div>
             <h3>الطلبات</h3>
-            <div class="number">{{ $orders->count(); }}</div>
+            <div class="number"><?php echo e($orders->count()); ?></div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.admin-layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\mouaz\Desktop\blog\reel_cart\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

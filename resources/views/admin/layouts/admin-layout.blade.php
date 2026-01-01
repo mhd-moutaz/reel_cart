@@ -23,7 +23,7 @@
         </div>
 
         <div class="user-info">
-            <span>{{ Auth::user()->name ?? 'المدير' }}</span>
+            <span>{{ Auth::user()->user->name ?? 'المدير' }}</span>
             <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit" class="logout-btn">🚪 تسجيل الخروج</button>

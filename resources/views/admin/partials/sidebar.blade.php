@@ -15,7 +15,7 @@
         </li>
 
         <li>
-            <a href="{{ route('admin.address') }}" class="{{ request()->routeIs('admin.address') ? 'active' : '' }}">
+            {{-- <a href="{{ route('admin.address') }}" class="{{ request()->routeIs('admin.address') ? 'active' : '' }}"> --}}
                 <span class="icon">📍</span>
                 <span class="text">العناوين</span>
             </a>
@@ -29,30 +29,30 @@
         </li>
 
         <li>
-            <a href="{{ route('admin.design_options') ?? '#' }}">
+            {{-- <a href="{{ route('admin.design_options') ?? '#' }}"> --}}
                 <span class="icon">⚙️</span>
                 <span class="text">اعدادات التصميم</span>
             </a>
         </li>
 
         <li>
-            <a href="{{ route('admin.designs') ?? '#' }}">
+            {{-- <a href="{{ route('admin.designs') ?? '#' }}"> --}}
                 <span class="icon">👕</span>
                 <span class="text">التصميمات</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('admin.orders.index') ?? '#' }}">
+            {{-- <a href="{{ route('admin.orders.index') ?? '#' }}"> --}}
                 <span class="icon">📦</span>
                 <span class="text">الطلبات</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('admin.wallets.index') }}"
+            {{-- <a href="{{ route('admin.wallets.index') }}"
                 class="{{ request()->routeIs('admin.wallets.*') ? 'active' : '' }}">
                 <span class="icon">💰</span>
                 <span class="text">المحافظ</span>
-            </a>
+            </a> --}}
         </li>
         {{--
         <li>
